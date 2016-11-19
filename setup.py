@@ -6,7 +6,7 @@ setup(name="cython_ipp",
       description="Cython definitions for the Intel "\
       "Integrated Performance Primitives (Intel IPP) library",
       license="BSD",
-      version='0.1.0',
+      version='0.2.0',
       url='https://github.com/strawlab/cython_ipp',
       packages = find_packages(),
       include_package_data=True,
