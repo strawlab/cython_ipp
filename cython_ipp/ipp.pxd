@@ -409,6 +409,13 @@ cdef extern from "ipp.h" nogil:
 
     IppStatus ippiMean_8u_C1R(Ipp8u* pSrc, int srcStep,
                               IppiSize roiSize, Ipp64f* pMean)
+    IppStatus ippiDotProd_8u64f_C1R(Ipp8u* pSrc1, int src1Step,
+                              Ipp8u* pSrc2, int src2Step,
+                              IppiSize roiSize, Ipp64f *pDp)
+    IppStatus ippiDotProd_32f64f_C1R(Ipp32f* pSrc1, int src1Step,
+                                    Ipp32f* pSrc2, int src2Step,
+                                    IppiSize roiSize, Ipp64f* result,
+                                    IppHintAlgorithm hint)
 
 #cdef extern from "ippcv.h":
     IppStatus ippiAdd_8u32f_C1IR(Ipp8u*  pSrc, int srcStep,
