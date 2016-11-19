@@ -281,6 +281,52 @@ cdef extern from "ipp.h" nogil:
         ippAlgHintFast
         ippAlgHintAccurate
 
+    ctypedef enum IppiBorderType:
+        ippBorderRepl
+        ippBorderWrap
+        ippBorderMirror
+        ippBorderMirrorR
+        ippBorderDefault
+        ippBorderConst
+        ippBorderTransp
+        ippBorderInMemTop
+        ippBorderInMemBottom
+        ippBorderInMemLeft
+        ippBorderInMemRight
+        ippBorderInMem
+
+    ctypedef enum IppiMaskSize:
+        ippMskSize1x3
+        ippMskSize1x5
+        ippMskSize3x1
+        ippMskSize3x3
+        ippMskSize5x1
+        ippMskSize5x5
+
+    ctypedef enum IppDataType:
+        ippUndef
+        ipp1u
+        ipp8u
+        ipp8uc
+        ipp8s
+        ipp8sc
+        ipp16u
+        ipp16uc
+        ipp16s
+        ipp16sc
+        ipp32u
+        ipp32uc
+        ipp32s
+        ipp32sc
+        ipp32f
+        ipp32fc
+        ipp64u
+        ipp64uc
+        ipp64s
+        ipp64sc
+        ipp64f
+        ipp64fc
+
 #cdef extern from "ippcore.h":
 #    IppStatus ippStaticInit()
 #    IppStatus ippStaticFree()
@@ -416,6 +462,30 @@ cdef extern from "ipp.h" nogil:
                                     Ipp32f* pSrc2, int src2Step,
                                     IppiSize roiSize, Ipp64f* result,
                                     IppHintAlgorithm hint)
+    IppStatus ippiFilterSobelHorizBorderGetBufferSize(IppiSize dstRoiSize,
+                                                      IppiMaskSize mask,
+                                                      IppDataType srcDataType,
+                                                      IppDataType dstDataType,
+                                                      int numChannels,
+                                                      int* pBufferSize)
+    IppStatus ippiFilterSobelHorizBorder_32f_C1R(Ipp32f* pSrc, int srcStep,
+                                      Ipp32f* pDst, int dstStep,
+                                      IppiSize dstRoiSize, IppiMaskSize mask,
+                                      IppiBorderType borderType,
+                                      Ipp32f borderValue,
+                                      Ipp8u* pBuffer)
+    IppStatus ippiFilterSobelVertBorderGetBufferSize(IppiSize dstRoiSize,
+                                                     IppiMaskSize mask,
+                                                     IppDataType srcDataType,
+                                                     IppDataType dstDataType,
+                                                     int numChannels,
+                                                     int* pBufferSize)
+    IppStatus ippiFilterSobelVertBorder_32f_C1R(Ipp32f* pSrc, int srcStep,
+                                      Ipp32f* pDst, int dstStep,
+                                      IppiSize dstRoiSize, IppiMaskSize mask,
+                                      IppiBorderType borderType,
+                                      Ipp32f borderValue,
+                                      Ipp8u* pBuffer)
 
 #cdef extern from "ippcv.h":
     IppStatus ippiAdd_8u32f_C1IR(Ipp8u*  pSrc, int srcStep,
@@ -448,10 +518,6 @@ cdef extern from "ipp.h" nogil:
     IppStatus ippiAbs_32f_C1IR(Ipp32f* pSrcDst, int srcDstStep,
                                IppiSize roiSize)
     IppStatus ippiFilterLowpass_8u_C1R(Ipp8u* pSrc, int srcStep,Ipp8u* pDst, int dstStep,IppiSize roiSize,IppiMaskSize maskSize)
-    IppStatus ippiFilterSobelHoriz_32f_C1R( Ipp32f *pSrc, int srcStep, Ipp32f *pDst, int dstStep, IppiSize dstRoiSize )
-    IppStatus ippiFilterSobelVert_32f_C1R ( Ipp32f *pSrc, int srcStep, Ipp32f *pDst, int dstStep, IppiSize dstRoiSize )
-    IppStatus ippiFilterSobelHoriz_8u_C1R( Ipp8u *pSrc, int srcStep, Ipp8u *pDst, int dstStep, IppiSize dstRoiSize )
-    IppStatus ippiFilterSobelVert_8u_C1R ( Ipp8u *pSrc, int srcStep, Ipp8u *pDst, int dstStep, IppiSize dstRoiSize )
 
     IppStatus ippiCFAToRGB_8u_C1C3R(Ipp8u *pSrc, IppiRect srcRoi, IppiSize srcSize, int srcStep, Ipp8u *pDst, int dstStep, IppiBayerGrid bayerGrid, int interpolation)
     IppStatus ippiColorToGray_8u_C3C1R(Ipp8u *pSrc, int srcStep, Ipp8u *pDst, int dstStep, IppiSize roiSize, Ipp32f coeffs[3])
@@ -461,5 +527,7 @@ cdef extern from "ipp.h" nogil:
     IppStatus ippiErode3x3_8u_C1IR( Ipp8u* pSrcDst, int srcDstStep, IppiSize roiSize)
 
 #cdef extern from "ipps.h":
+    Ipp8u* ippsMalloc_8u(int len)
+    void ippsFree(void* ptr)
     IppStatus ippSetFlushToZero( int value, unsigned int* pUMask )
     IppStatus ippSetDenormAreZeros( int value )
