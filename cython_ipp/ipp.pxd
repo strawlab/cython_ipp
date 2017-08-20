@@ -1,5 +1,7 @@
 #emacs, this is -*-Python-*- mode
 
+cimport libc.stdint
+
 cdef extern from "ipp.h" nogil:
     ctypedef enum IppStatus:
         ippStsNotSupportedModeErr
@@ -254,12 +256,12 @@ cdef extern from "ipp.h" nogil:
     ctypedef unsigned short  Ipp16u
     ctypedef unsigned int    Ipp32u
 
-    ctypedef signed char    Ipp8s
-    ctypedef signed short   Ipp16s
-    ctypedef signed int     Ipp32s
+
+    ctypedef libc.stdint.int8_t Ipp8s
+    ctypedef libc.stdint.int16_t Ipp16s
+    ctypedef libc.stdint.int32_t Ipp32s
+    ctypedef libc.stdint.uint64_t Ipp64u
     ctypedef float   Ipp32f
-#    ctypedef __INT64 Ipp64s
-#    ctypedef __UINT64 Ipp64u
     ctypedef double  Ipp64f
 
     ctypedef struct IppiSize:
@@ -327,6 +329,17 @@ cdef extern from "ipp.h" nogil:
         ipp64f
         ipp64fc
 
+#cdef extern from "ippbase.h":
+    ctypedef struct IppLibraryVersion:
+        int major
+        int minor
+        int majorBuild
+        int build
+        char targetCpu[4]
+        const char* Name
+        const char* Version
+        const char* BuildDate
+
 #cdef extern from "ippcore.h":
 #    IppStatus ippStaticInit()
 #    IppStatus ippStaticFree()
@@ -338,10 +351,15 @@ cdef extern from "ipp.h" nogil:
 
 #    IppCpuType ippCoreGetCpuType()
     char* ippGetStatusString( IppStatus StsCode )
+    IppStatus ippInit()
+    IppStatus ippGetCpuFeatures( Ipp64u* pFeaturesMask, Ipp32u  pCpuidInfoRegs[4])
+    Ipp64u ippGetEnabledCpuFeatures()
 
 #cdef extern from "ippi.h":
     ctypedef struct IppiMomentState_64f
     ctypedef Ipp64f IppiHuMoment_64f[7]
+
+    const IppLibraryVersion* ippiGetLibVersion()
 
     Ipp8u* ippiMalloc_8u_C1( int widthPixels, int heightPixels, int* pStepBytes )
     Ipp8u* ippiMalloc_8u_C3( int widthPixels, int heightPixels, int* pStepBytes )
